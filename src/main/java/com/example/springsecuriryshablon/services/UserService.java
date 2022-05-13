@@ -27,17 +27,11 @@ public class UserService implements UserDetailsService {
     @Transactional
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        System.out.println("Загружаю юзер детаилс. ");
-
          User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new ResourceAccessException("Нет юзера с таким именем"));
 
         org.springframework.security.core.userdetails.User userD = new org.springframework.security.core.userdetails.
                 User(user.getUsername(),user.getPassword(), mapRolesTuAuthorities(user.getRoles()));
-
-        userD.getAuthorities().stream().forEach(a-> System.out.println("***Authorities: "+a));
-        System.out.println("***NAME: "+userD.getUsername());
-        System.out.println("***NAME: "+userD.getPassword());
 
         return userD;
     }
